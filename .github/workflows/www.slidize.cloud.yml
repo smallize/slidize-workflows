@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout theme repo
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
           repository: smallize/slidize
           token: ${{ secrets.REPO_TOKEN }}
           fetch-depth: 0 
+          submodules: true
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:
