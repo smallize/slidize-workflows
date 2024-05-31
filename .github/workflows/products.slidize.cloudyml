@@ -1,4 +1,4 @@
-name: Products
+name: products.slidize.cloud
 on:
   workflow_dispatch:
     inputs:
@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout theme repo
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
-          repository: smallize/slidize.cloud
+          repository: smallize/slidize
           token: ${{ secrets.REPO_TOKEN }}
           fetch-depth: 0 
+          submodules: true
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:
@@ -31,9 +32,9 @@ jobs:
           echo "::set-output name=url::https://products-qa.slidize.cloud"
         fi
     - name: Build 
-      run: hugo --config "./configs/products.toml" -b "${{ steps.base-url.outputs.url }}" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
+      run: hugo --config "configs/slidize.cloud/products.toml","configs/slidize.cloud/common.toml" -b "${{ steps.base-url.outputs.url }}" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
     - name: Deploy
-      run: hugo deploy --config "configs/products.toml" --maxDeletes=-1 --target "${{ github.event.inputs.environment }}" --invalidateCDN --force
+      run: hugo deploy --config "configs/slidize.cloud/products.toml" --maxDeletes=-1 --target "${{ github.event.inputs.environment }}" --invalidateCDN --force
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS }}
