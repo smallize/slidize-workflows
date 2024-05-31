@@ -1,4 +1,4 @@
-name: www.slidize.cloud
+name: www.slidize.app
 on:
   workflow_dispatch:
 jobs:
@@ -17,18 +17,10 @@ jobs:
       with:
           hugo-version: 'latest'
           extended: true
-    - name: Determine Base URL
-      id: base-url
-      run: |
-        if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-          echo "::set-output name=url::https://www.slidize.cloud"
-        else
-          echo "::set-output name=url::https://qa.slidize.cloud"
-        fi
     - name: Build 
-      run: hugo --config "configs/slidize.cloud/www.toml","configs/slidize.cloud/common.toml" -b "${{ steps.base-url.outputs.url }}" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
+      run: hugo --config "configs/slidize.app/www.toml","configs/slidize.app/common.toml" -b "https://www.slidize.app" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
     - name: Deploy
-      run: hugo deploy --config "configs/slidize.cloud/www.toml" --maxDeletes=-1 --target "${{ github.event.inputs.environment }}" --invalidateCDN --force
+      run: hugo deploy --config "configs/slidize.app/www.toml" --maxDeletes=-1 --target "production" --invalidateCDN --force
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS }}
