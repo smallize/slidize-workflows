@@ -26,9 +26,9 @@ jobs:
     - name: Install postcss-cli
       run: npm install -D --save postcss-cli
     - name: Build 
-      run: hugo --config "configs/slidize.cloud/about.toml","configs/slidize.cloud/common.toml" -b "https://about.slidize.cloud" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
+      run: hugo --config "configs/about.slidize.cloud.toml","configs/common.slidize.cloud.toml" -b "https://about.slidize.cloud" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
     - name: Deploy
-      run: hugo deploy --config "configs/slidize.cloud/about.toml" --maxDeletes=-1 --target "production" --invalidateCDN --force
+      run: hugo deploy --config "configs/about.slidize.cloud.toml" --maxDeletes=-1 --target "production" --invalidateCDN --force
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS }}

@@ -1,6 +1,12 @@
-name: www.slidize.ai
+name: reference.slidize.com
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        type: environment
+        default: staging
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,14 +27,14 @@ jobs:
       id: base-url
       run: |
         if [ "${{ github.event.inputs.environment }}" = "production" ]; then
-          echo "::set-output name=url::https://www.slidize.ai"
+          echo "::set-output name=url::https://reference.slidize.com"
         else
-          echo "::set-output name=url::https://qa.slidize.ai"
+          echo "::set-output name=url::https://reference-qa.slidize.com"
         fi
     - name: Build 
-      run: hugo --config "configs/www.slidize.ai.toml","configs/common.slidize.ai.toml" -b "https://www.slidize.ai" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
+      run: hugo --config "configs/reference.slidize.com.toml","configs/common.slidize.com.toml" -b "${{ steps.base-url.outputs.url }}" --cleanDestinationDir --minify --templateMetrics --templateMetricsHints --enableGitInfo
     - name: Deploy
-      run: hugo deploy --config "configs/www.slidize.ai.toml" --maxDeletes=-1 --target "production" --invalidateCDN --force
+      run: hugo deploy --config "configs/reference.slidize.com.toml" --maxDeletes=-1 --target "${{ github.event.inputs.environment }}" --invalidateCDN --force
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS }}
